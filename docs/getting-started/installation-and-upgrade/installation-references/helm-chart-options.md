@@ -278,7 +278,11 @@ http {
         server IP_NODE_2:80;
         server IP_NODE_3:80;
     }
-
+    upstream rancher-https {
+        server IP_NODE_1:443;
+        server IP_NODE_2:443;
+        server IP_NODE_3:443;
+    }
     map $http_upgrade $connection_upgrade {
         default Upgrade;
         ''      close;
@@ -295,7 +299,7 @@ http {
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header X-Forwarded-Port $server_port;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_pass http://rancher;
+            proxy_pass https://rancher-https;
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection $connection_upgrade;
